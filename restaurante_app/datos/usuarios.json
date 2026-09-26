@@ -1,0 +1,14 @@
+[
+    {
+        "identificador": "U001",
+        "nombre": "Administrador del Restaurante",
+        "usuario": "administrador",
+        "contrasena": "1234"
+    },
+    {
+        "identificador": "U002",
+        "nombre": "Encargado de Atencion",
+        "usuario": "encargado",
+        "contrasena": "5678"
+    }
+]

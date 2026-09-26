@@ -1,0 +1,23 @@
+[
+    {
+        "codigo": "P001",
+        "nombre": "Hamburguesa Clasica",
+        "categoria": "Comida rapida",
+        "precio": 3.5,
+        "stock": 15
+    },
+    {
+        "codigo": "P002",
+        "nombre": "Jugo de Mora",
+        "categoria": "Bebidas",
+        "precio": 1.75,
+        "stock": 20
+    },
+    {
+        "codigo": "P003",
+        "nombre": "Ensalada de la Casa",
+        "categoria": "Platos saludables",
+        "precio": 4.25,
+        "stock": 10
+    }
+]
