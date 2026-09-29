@@ -1,4 +1,4 @@
-# Restaurante App - Semana 15
+# Restaurante Cris - Semana 16
 
 ## Autor
 
@@ -6,74 +6,36 @@
 
 ## Descripción del proyecto
 
-Restaurante App es una aplicación gráfica desarrollada en Python utilizando Programación Orientada a Objetos y Tkinter. El sistema permite iniciar sesión, consultar usuarios, gestionar productos y registrar ventas mediante una interfaz organizada y modular.
+Restaurante Cris es una aplicación de escritorio desarrollada en Python mediante Tkinter y Programación Orientada a Objetos. El sistema permite gestionar productos, usuarios y ventas utilizando una arquitectura modular y archivos JSON para almacenar la información.
 
-Durante la Semana 15 se continuó con la evolución del proyecto realizado en semanas anteriores, incorporando los conceptos fundamentales del manejo de eventos. La principal funcionalidad agregada corresponde al registro de ventas, relacionando un usuario existente con un producto registrado.
+Durante la Semana 16 se continuó con la evolución del proyecto desarrollado en semanas anteriores. En esta etapa se amplió principalmente la gestión de usuarios mediante el manejo de eventos en Tkinter, incorporando roles, operaciones CRUD, selección automática desde una tabla y atajos de teclado.
 
-La aplicación mantiene la separación entre modelos, servicios, interfaz gráfica, archivos de datos y punto de entrada, permitiendo conservar una estructura modular y organizada.
+El proyecto conserva las funciones desarrolladas anteriormente, como el inicio de sesión, la gestión de productos, el registro de ventas, la navegación entre secciones y la persistencia de datos.
 
-## Objetivo de la Semana 15
+## Objetivo de la Semana 16
 
-El objetivo de esta semana es aplicar los fundamentos básicos del manejo de eventos en una interfaz gráfica.
+El objetivo principal de esta semana fue aplicar el manejo de eventos dentro de la sección de usuarios.
 
-Para ello, se implementó una nueva sección de ventas en la cual el usuario puede seleccionar un usuario registrado y un producto existente. Al presionar el botón **Registrar venta**, el evento se conecta mediante `command=` con un callback encargado de solicitar el registro de la operación al servicio correspondiente.
+Se implementaron diferentes mecanismos de interacción utilizando `bind()`, eventos virtuales de Tkinter, callbacks y botones asociados mediante `command=`.
 
-El flujo implementado es el siguiente:
-
-```text
-Usuario
-   ↓
-Selecciona usuario y producto
-   ↓
-Botón "Registrar venta"
-   ↓
-command=
-   ↓
-Callback registrar_venta()
-   ↓
-RestauranteServicio
-   ↓
-Persistencia en ventas.json
-   ↓
-Actualización de la tabla
-   ↓
-Respuesta visual al usuario
-```
+La interfaz permite responder a acciones realizadas por el usuario y mantiene separadas las responsabilidades entre la interfaz gráfica, los modelos, los servicios y la persistencia de datos.
 
 ## Evolución del proyecto
 
-La Semana 15 parte del proyecto desarrollado previamente y conserva las funcionalidades existentes.
+La Semana 16 parte directamente de la aplicación desarrollada en la Semana 15.
 
-### Funcionalidades conservadas
+Se conservaron las siguientes funcionalidades:
 
 - Inicio de sesión.
-- Validación de usuarios.
-- Consulta de usuarios registrados.
+- Navegación mediante menú lateral.
 - Gestión de productos.
-- Registro de productos.
-- Búsqueda de productos por código.
-- Actualización de productos.
-- Eliminación de productos.
-- Limpieza del formulario.
-- Visualización de productos mediante `Treeview`.
-- Persistencia de usuarios y productos mediante archivos JSON.
+- Registro y consulta de ventas.
+- Persistencia mediante archivos JSON.
+- Uso de una sola ventana principal.
+- Uso de recursos gráficos almacenados en `assets/`.
+- Arquitectura modular basada en modelos, servicios e interfaz gráfica.
 
-### Funcionalidades incorporadas en la Semana 15
-
-- Modelo `Venta`.
-- Archivo `ventas.json`.
-- Nueva sección **Ventas**.
-- Selección de usuarios mediante `ttk.Combobox`.
-- Selección de productos mediante `ttk.Combobox`.
-- Botón **Registrar venta**.
-- Uso de `command=` para asociar el botón con un callback.
-- Validación de la venta mediante `RestauranteServicio`.
-- Generación automática de identificadores de venta.
-- Registro automático de la fecha.
-- Persistencia de ventas en formato JSON.
-- Visualización de ventas mediante `Treeview`.
-- Actualización inmediata de la interfaz después de registrar una venta.
-- Incorporación de íconos y logotipo mediante la carpeta `assets`.
+Como nueva funcionalidad se incorporó una gestión completa de usuarios mediante eventos.
 
 ## Estructura del proyecto
 
@@ -118,298 +80,388 @@ restaurante_app/
 │   ├── login_view.py
 │   └── main_view.py
 │
-└── main.py
+├── main.py
+└── README.md
 ```
 
-## Arquitectura del sistema
+## Arquitectura modular
 
-El proyecto utiliza una estructura modular para separar las responsabilidades de la aplicación.
+El proyecto mantiene una separación clara de responsabilidades.
 
-### `modelos/`
+### Modelos
 
-Contiene las clases que representan las entidades principales del sistema:
+La carpeta `modelos/` contiene las clases que representan las principales entidades utilizadas por el sistema:
 
-- `Producto`: representa los productos disponibles en el restaurante.
-- `Usuario`: representa los usuarios autorizados para ingresar al sistema.
-- `Venta`: representa la relación entre un usuario, un producto y la fecha de la operación.
+- `Producto`
+- `Usuario`
+- `Venta`
 
-### `servicios/`
+Cada clase contiene sus respectivos atributos, propiedades y validaciones.
 
-Contiene la lógica del sistema.
+### Servicios
 
-- `ArchivoServicio`: permite leer y escribir archivos JSON.
-- `RestauranteServicio`: administra usuarios, productos y ventas, además de realizar las validaciones correspondientes.
+La carpeta `servicios/` contiene la lógica de funcionamiento del sistema.
 
-### `ui/`
+`ArchivoServicio` se encarga de leer y escribir información en los archivos JSON.
 
-Contiene las interfaces desarrolladas con Tkinter.
+`RestauranteServicio` administra las operaciones relacionadas con productos, usuarios y ventas. También contiene las validaciones necesarias y se encarga de solicitar la persistencia de los cambios.
 
-- `LoginView`: controla la pantalla de inicio de sesión.
-- `MainView`: contiene la navegación principal, la consulta de usuarios, la gestión de productos y el registro de ventas.
+### Interfaz gráfica
 
-### `datos/`
+La carpeta `ui/` contiene las vistas desarrolladas mediante Tkinter.
 
-Contiene los archivos utilizados para mantener la persistencia de la información:
+`LoginView` permite autenticar al usuario.
 
-- `usuarios.json`
-- `productos.json`
-- `ventas.json`
+`MainView` contiene la navegación principal y las secciones de Inicio, Usuarios, Productos y Ventas.
 
-### `assets/`
+La interfaz gráfica obtiene los datos ingresados por el usuario y delega las operaciones a `RestauranteServicio`.
 
-Contiene los recursos visuales utilizados por la aplicación, incluyendo el logotipo del restaurante y los íconos de los botones y opciones del menú.
+## Gestión de usuarios
 
-## Gestión de productos
+Durante la Semana 16 se amplió la sección de usuarios para permitir las siguientes operaciones:
 
-La sección **Productos** conserva las funciones desarrolladas previamente.
+- Registrar usuarios.
+- Consultar usuarios.
+- Actualizar usuarios.
+- Eliminar usuarios.
+- Mostrar los usuarios almacenados en un `Treeview`.
+- Seleccionar usuarios directamente desde la tabla.
+- Asignar roles mediante un `Combobox`.
+- Guardar los cambios en `usuarios.json`.
 
-Cada producto posee los siguientes atributos:
+La tabla de usuarios muestra únicamente:
 
-```text
-Código
-Nombre
-Categoría
-Precio
-Stock
-```
+- Identificador.
+- Nombre.
+- Usuario.
+- Rol.
 
-Desde la interfaz es posible:
+La contraseña no se presenta directamente en el `Treeview`.
 
-- Registrar un producto.
-- Buscar un producto por código.
-- Actualizar sus datos.
-- Eliminar un producto.
-- Limpiar el formulario.
-- Consultar los productos registrados mediante una tabla.
+## Roles de usuario
 
-Los cambios realizados se almacenan en `productos.json`.
+El modelo `Usuario` incorpora el atributo `rol`.
 
-## Gestión de ventas
+Los roles utilizados son:
 
-La sección **Ventas** permite registrar una operación relacionando un usuario existente con un producto registrado.
+- **Administrador**
+- **Empleado**
+- **Cliente**
 
-Para realizar una venta se utilizan dos componentes `ttk.Combobox`:
+El usuario con rol Administrador puede acceder a la sección administrativa de Usuarios.
 
-```text
-Usuario  → usuario registrado
-Producto → producto registrado
-```
+Los usuarios con rol Empleado o Cliente no disponen de la misma opción de administración de usuarios.
 
-Después de seleccionar ambos elementos, el usuario presiona:
+Desde la pantalla de gestión únicamente se pueden registrar usuarios con roles Empleado o Cliente.
 
-```text
-Registrar venta
-```
+Además, el usuario Administrador que se encuentra actualmente autenticado no puede eliminar accidentalmente su propia cuenta ni cambiar su rol administrativo desde esta pantalla.
 
-El sistema valida la información, genera automáticamente un identificador para la venta y registra la fecha de la operación.
+## Manejo de eventos
 
-Por ejemplo:
+Uno de los principales objetivos de la Semana 16 fue implementar diferentes eventos dentro de la gestión de usuarios.
 
-```text
-Venta: V001
-Usuario: U001 - Administrador del Restaurante
-Producto: P001 - Hamburguesa Clasica
-Fecha: 2026-09-23
-```
+### Evento `<<TreeviewSelect>>`
 
-Las ventas registradas se muestran inmediatamente en una tabla `Treeview`.
-
-## Manejo de eventos con command y callbacks
-
-Uno de los principales conceptos aplicados durante la Semana 15 es el manejo de eventos mediante `command=`.
-
-El botón utilizado para registrar una venta se conecta con el método correspondiente de la interfaz:
+Este evento se activa cuando el administrador selecciona un registro dentro de la tabla de usuarios.
 
 ```python
-self.crear_boton(
-    acciones,
-    "Registrar venta",
-    self.registrar_venta,
-    "Accion.TButton",
-    "add.png",
+self.tabla_usuarios.bind(
+    "<<TreeviewSelect>>",
+    self.al_seleccionar_usuario,
 )
 ```
 
-En este caso:
+El callback obtiene el identificador de la fila seleccionada y utiliza `RestauranteServicio` para consultar el objeto correspondiente.
 
-```text
-self.registrar_venta
+Después, los datos del usuario se cargan automáticamente en el formulario.
+
+### Evento `<Return>`
+
+La tecla Enter funciona como un atajo para registrar un usuario.
+
+```python
+widget.bind(
+    "<Return>",
+    self.al_presionar_enter,
+)
 ```
 
-es el callback que se ejecuta cuando el usuario presiona el botón.
+El callback reutiliza el método existente:
 
-El callback obtiene las opciones seleccionadas en la interfaz y solicita a `RestauranteServicio` que realice el registro.
+```python
+def al_presionar_enter(self, event):
+    self.registrar_usuario()
+```
 
-La lógica de negocio no se realiza directamente en la interfaz, sino que se delega al servicio:
+De esta forma no se repite la lógica del registro.
+
+### Evento `<Escape>`
+
+La tecla Escape permite cancelar la operación actual y limpiar el formulario.
+
+```python
+widget.bind(
+    "<Escape>",
+    self.al_presionar_escape,
+)
+```
+
+El callback reutiliza el método encargado de limpiar el formulario:
+
+```python
+def al_presionar_escape(self, event):
+    self.limpiar_formulario_usuario()
+```
+
+También se elimina cualquier selección activa del `Treeview`.
+
+### Evento `<<ComboboxSelected>>`
+
+El `Combobox` utilizado para seleccionar el rol responde al evento:
+
+```python
+self.usuario_rol_combo.bind(
+    "<<ComboboxSelected>>",
+    self.al_seleccionar_rol,
+)
+```
+
+Al seleccionar un rol, la interfaz actualiza el texto informativo que muestra el rol actualmente elegido.
+
+## Uso de `bind()`
+
+El método `bind()` se utiliza para asociar un evento específico de un componente con una función callback.
+
+El flujo utilizado en la aplicación es:
 
 ```text
-MainView
-   ↓
+Interacción del usuario
+        ↓
+Evento
+        ↓
+bind()
+        ↓
+callback(event)
+        ↓
 RestauranteServicio
-   ↓
-ArchivoServicio
-   ↓
-ventas.json
+        ↓
+Persistencia
+        ↓
+Actualización de la interfaz
 ```
 
-De esta manera se mantiene una adecuada separación de responsabilidades.
+Esto permite que la aplicación responda a diferentes acciones del usuario sin concentrar toda la lógica dentro de la interfaz gráfica.
 
-## Persistencia de datos
+## Uso de `command=`
 
-La información del sistema se almacena utilizando archivos JSON.
+Los botones principales continúan utilizando `command=`.
 
-### Productos
+Por ejemplo:
 
-```text
-datos/productos.json
+```python
+command=self.registrar_usuario
 ```
 
-### Usuarios
+Los botones disponibles en la sección Usuarios son:
+
+- Registrar.
+- Actualizar.
+- Eliminar.
+- Limpiar.
+
+`command=` se utiliza para acciones directas realizadas mediante botones, mientras que `bind()` permite responder a eventos específicos como teclas, selección de filas o cambios en un `Combobox`.
+
+## Callbacks
+
+Los callbacks son métodos que se ejecutan cuando ocurre una determinada interacción dentro de la aplicación.
+
+Entre los callbacks utilizados durante la Semana 16 se encuentran:
+
+```python
+al_seleccionar_usuario()
+al_presionar_enter()
+al_presionar_escape()
+al_seleccionar_rol()
+```
+
+Estos métodos coordinan la respuesta de la interfaz y reutilizan las funciones existentes.
+
+Las reglas de negocio y la persistencia continúan siendo responsabilidad de `RestauranteServicio`.
+
+## Persistencia de usuarios
+
+La información se almacena en:
 
 ```text
 datos/usuarios.json
 ```
 
-### Ventas
+Cada usuario contiene los siguientes datos:
+
+```json
+{
+    "identificador": "U002",
+    "nombre": "Encargado de Atencion",
+    "usuario": "encargado",
+    "contrasena": "5678",
+    "rol": "Empleado"
+}
+```
+
+Cuando se registra, actualiza o elimina un usuario, `RestauranteServicio` actualiza la colección y posteriormente utiliza `ArchivoServicio` para guardar los cambios.
+
+Al cerrar y volver a ejecutar la aplicación, los usuarios son recuperados desde `usuarios.json`.
+
+## Gestión de productos
+
+La sección Productos conserva las funcionalidades desarrolladas anteriormente.
+
+Permite:
+
+- Registrar productos.
+- Buscar productos por código.
+- Actualizar productos.
+- Eliminar productos.
+- Limpiar el formulario.
+- Mostrar los productos registrados mediante un `Treeview`.
+
+Los productos se almacenan en:
+
+```text
+datos/productos.json
+```
+
+## Gestión de ventas
+
+La sección Ventas conserva las funcionalidades desarrolladas durante la Semana 15.
+
+Permite seleccionar un usuario y un producto mediante componentes `Combobox` y registrar una venta.
+
+Las ventas almacenan:
+
+- Identificador de la venta.
+- Identificador del usuario.
+- Código del producto.
+- Fecha.
+
+La información se guarda en:
 
 ```text
 datos/ventas.json
 ```
 
-Una venta almacenada tiene una estructura similar a la siguiente:
+Las ventas registradas se muestran mediante un `Treeview`.
 
-```json
-{
-    "identificador": "V001",
-    "usuario_id": "U001",
-    "producto_codigo": "P001",
-    "fecha": "2026-09-23"
-}
-```
+## Recursos visuales
 
-Cuando se registra una nueva venta, `RestauranteServicio` actualiza la colección de ventas y utiliza `ArchivoServicio` para guardar nuevamente la información en `ventas.json`.
-
-Esto permite que las ventas permanezcan almacenadas incluso después de cerrar y volver a ejecutar la aplicación.
-
-## Interfaz gráfica
-
-La aplicación utiliza Tkinter y `ttk` para construir la interfaz gráfica.
-
-El menú principal dispone de las siguientes secciones:
+El proyecto utiliza la carpeta:
 
 ```text
-Inicio
-Usuarios
-Productos
-Ventas
-Cerrar sesión
+assets/
 ```
 
-La sección de inicio muestra un resumen con la cantidad de:
+para almacenar los recursos gráficos utilizados por la aplicación.
 
-- Usuarios registrados.
-- Productos registrados.
-- Ventas registradas.
+Dentro de esta carpeta se encuentran los íconos utilizados en botones y navegación, además del logotipo e icono de Restaurante Cris.
 
-Además, se incorporó la carpeta `assets` para utilizar recursos visuales propios del restaurante.
+Estos recursos permiten mantener una interfaz visualmente consistente entre las diferentes secciones.
 
-Los íconos se utilizan en:
-
-- Inicio.
-- Usuarios.
-- Productos.
-- Ventas.
-- Registrar.
-- Buscar.
-- Actualizar.
-- Eliminar.
-- Limpiar.
-- Cerrar sesión.
-
-También se utiliza un logotipo en la pantalla de inicio de sesión y un icono para la ventana principal.
-
-## Credenciales de prueba
-
-El sistema dispone de los siguientes usuarios registrados:
+## Credenciales iniciales
 
 ### Administrador
 
 ```text
 Usuario: administrador
 Contraseña: 1234
+Rol: Administrador
 ```
 
-### Encargado
+### Empleado
 
 ```text
 Usuario: encargado
 Contraseña: 5678
+Rol: Empleado
 ```
 
 ## Ejecución del proyecto
 
 Para ejecutar la aplicación se debe tener instalado Python.
 
-### 1. Abrir el proyecto
-
-Ubicarse dentro de la carpeta:
-
-```text
-restaurante_app
-```
-
-### 2. Ejecutar el archivo principal
-
-Desde una terminal ejecutar:
+Desde una terminal ubicada dentro de la carpeta `restaurante_app`, ejecutar:
 
 ```bash
 python main.py
 ```
 
-También se puede ejecutar `main.py` directamente desde Visual Studio Code.
+También puede utilizarse:
 
-### 3. Iniciar sesión
+```bash
+python3 main.py
+```
 
-Utilizar una de las credenciales registradas.
+dependiendo de la configuración del sistema operativo.
 
-Después del inicio de sesión se mostrará el panel principal de Restaurante App.
+## Flujo de ejecución
+
+```text
+main.py
+   ↓
+ArchivoServicio
+   ↓
+RestauranteServicio
+   ↓
+LoginView
+   ↓
+Validación de usuario
+   ↓
+MainView
+   ↓
+Inicio / Usuarios / Productos / Ventas
+```
+
+Cuando el usuario autenticado posee el rol Administrador, puede ingresar a la sección Usuarios y realizar las operaciones administrativas correspondientes.
 
 ## Pruebas realizadas
 
-Para comprobar el funcionamiento de la aplicación se verificaron las siguientes operaciones:
+Se verificó el funcionamiento de las siguientes operaciones:
 
-- Ejecución correcta de `main.py`.
-- Inicio de sesión con usuarios registrados.
-- Navegación entre las diferentes secciones.
-- Consulta de usuarios.
-- Visualización de productos registrados.
-- Funcionamiento del CRUD de productos.
-- Selección de usuario para una venta.
-- Selección de producto para una venta.
-- Registro de una venta mediante el botón correspondiente.
-- Ejecución del callback asociado mediante `command=`.
-- Validación de la operación mediante `RestauranteServicio`.
-- Almacenamiento de la venta en `ventas.json`.
-- Actualización automática de la tabla de ventas.
-- Recuperación de las ventas después de cerrar y volver a ejecutar la aplicación.
-- Visualización correcta de íconos y logotipo desde la carpeta `assets`.
+- Inicio correcto de la aplicación.
+- Inicio de sesión mediante las credenciales almacenadas.
+- Acceso a la gestión de usuarios mediante el rol Administrador.
+- Restricción de la gestión administrativa para otros roles.
+- Registro de usuarios.
+- Actualización de usuarios.
+- Eliminación de usuarios con confirmación previa.
+- Protección de la cuenta administrativa actualmente autenticada.
+- Selección automática de usuarios mediante `<<TreeviewSelect>>`.
+- Registro mediante la tecla Enter.
+- Limpieza del formulario mediante la tecla Escape.
+- Respuesta del selector de roles mediante `<<ComboboxSelected>>`.
+- Actualización automática del `Treeview`.
+- Persistencia de los usuarios en `usuarios.json`.
+- Recuperación de los usuarios después de cerrar y volver a ejecutar la aplicación.
+- Funcionamiento de Productos.
+- Funcionamiento de Ventas.
+- Funcionamiento de los recursos visuales almacenados en `assets/`.
 
 ## Tecnologías utilizadas
 
-- Python
-- Programación Orientada a Objetos
-- Tkinter
-- ttk
-- JSON
-- pathlib
-- Visual Studio Code
-- Git
-- GitHub
+- Python.
+- Tkinter.
+- ttk.
+- Programación Orientada a Objetos.
+- JSON.
+- pathlib.
+- Git.
+- GitHub.
 
 ## Conclusión
 
-Durante la Semana 15 se continuó con la evolución de Restaurante App incorporando una nueva gestión de ventas y aplicando los fundamentos básicos del manejo de eventos en interfaces gráficas.
+Durante la Semana 16 se amplió Restaurante Cris incorporando el manejo de eventos dentro de la gestión de usuarios.
 
-El uso de `command=` permite relacionar las acciones realizadas por el usuario con callbacks específicos. A su vez, la lógica y las validaciones se mantienen dentro de `RestauranteServicio`, mientras que la persistencia se realiza mediante archivos JSON.
+El uso de `bind()`, `command=`, callbacks, `Treeview` y `Combobox` permitió crear una interfaz más interactiva sin modificar la arquitectura modular del proyecto.
 
-La aplicación conserva las funcionalidades desarrolladas previamente e integra usuarios, productos, ventas y recursos visuales dentro de una arquitectura modular orientada a objetos.
+La aplicación mantiene separadas las responsabilidades entre modelos, servicios, interfaz gráfica y persistencia, al mismo tiempo que conserva las funcionalidades implementadas en semanas anteriores.
+
+Con esta evolución, el sistema permite administrar usuarios mediante roles y diferentes formas de interacción, manteniendo la información almacenada de manera persistente en archivos JSON.

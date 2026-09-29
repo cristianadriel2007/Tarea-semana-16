@@ -3,12 +3,28 @@
         "identificador": "U001",
         "nombre": "Administrador del Restaurante",
         "usuario": "administrador",
-        "contrasena": "1234"
+        "contrasena": "1234",
+        "rol": "Administrador"
     },
     {
         "identificador": "U002",
         "nombre": "Encargado de Atencion",
         "usuario": "encargado",
-        "contrasena": "5678"
+        "contrasena": "5678",
+        "rol": "Empleado"
+    },
+    {
+        "identificador": "U003",
+        "nombre": "Carlos Acosta",
+        "usuario": "carlos",
+        "contrasena": "1234",
+        "rol": "Cliente"
+    },
+    {
+        "identificador": "U004",
+        "nombre": "Dennis Orellana",
+        "usuario": "dennis",
+        "contrasena": "12345",
+        "rol": "Cliente"
     }
 ]

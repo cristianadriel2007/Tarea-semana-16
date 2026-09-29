@@ -11,50 +11,33 @@ class AplicacionRestaurante:
     def __init__(self):
         self.root = tk.Tk()
 
-        self.root.title(
-            "Restaurante App - Tkinter"
-        )
-
-        self.root.geometry(
-            "1100x650"
-        )
-
-        self.root.minsize(
-            900,
-            550,
-        )
+        self.root.title("Restaurante Cris - Tkinter")
+        self.root.geometry("1100x650")
+        self.root.minsize(900, 550)
 
         self.icono_app = None
 
         # Ruta principal del proyecto.
         ruta_base = Path(__file__).resolve().parent
 
-        # Configura el icono de la ventana.
-        self.configurar_icono_ventana(
-            ruta_base
-        )
+        # Configura el icono de la aplicación.
+        self.configurar_icono_ventana(ruta_base)
 
-        # Servicio encargado de leer y escribir los JSON.
+        # Prepara los servicios que utilizarán las vistas.
         archivo_servicio = ArchivoServicio(
             ruta_base / "datos"
         )
 
-        # Servicio principal del restaurante.
-        self.restaurante_servicio = (
-            RestauranteServicio(
-                archivo_servicio
-            )
+        self.restaurante_servicio = RestauranteServicio(
+            archivo_servicio
         )
 
         self.vista_actual = None
 
-        # La aplicacion inicia mostrando el login.
+        # La aplicación inicia mostrando el login.
         self.mostrar_login()
 
-    def configurar_icono_ventana(
-        self,
-        ruta_base,
-    ):
+    def configurar_icono_ventana(self, ruta_base):
         ruta_icono = (
             ruta_base
             / "assets"
@@ -78,11 +61,9 @@ class AplicacionRestaurante:
         except tk.TclError:
             pass
 
-    def cambiar_vista(
-        self,
-        nueva_vista,
-    ):
-        # Mantiene una sola ventana.
+    def cambiar_vista(self, nueva_vista):
+        # Reemplaza la vista actual dentro
+        # de la misma ventana principal.
         if self.vista_actual is not None:
             self.vista_actual.destroy()
 
@@ -100,9 +81,7 @@ class AplicacionRestaurante:
             self.mostrar_interfaz_principal,
         )
 
-        self.cambiar_vista(
-            vista
-        )
+        self.cambiar_vista(vista)
 
     def mostrar_interfaz_principal(
         self,
@@ -115,9 +94,7 @@ class AplicacionRestaurante:
             self.mostrar_login,
         )
 
-        self.cambiar_vista(
-            vista
-        )
+        self.cambiar_vista(vista)
 
     def ejecutar(self):
         self.root.mainloop()
@@ -125,4 +102,4 @@ class AplicacionRestaurante:
 
 if __name__ == "__main__":
     app = AplicacionRestaurante()
-    app.ejecutar()
+    app.ejecutar() 

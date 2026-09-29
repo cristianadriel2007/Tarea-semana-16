@@ -14,23 +14,21 @@ class RestauranteServicio:
         self.cargar_datos()
 
     def cargar_datos(self):
-        # Carga los datos persistidos y los convierte en objetos.
-        usuarios_json = self.archivo_servicio.leer_json(
-            "usuarios.json"
-        )
-        productos_json = self.archivo_servicio.leer_json(
-            "productos.json"
-        )
-        ventas_json = self.archivo_servicio.leer_json(
-            "ventas.json"
-        )
+        # Carga los datos almacenados en los archivos JSON.
+        usuarios_json = self.archivo_servicio.leer_json("usuarios.json")
+        productos_json = self.archivo_servicio.leer_json("productos.json")
+        ventas_json = self.archivo_servicio.leer_json("ventas.json")
 
         self.usuarios = [
             Usuario(
                 datos.get("identificador", ""),
                 datos.get("nombre", ""),
                 datos.get("usuario", ""),
-                datos.get("contrasena", ""),
+                datos.get(
+                    "contrasena",
+                    datos.get("contraseña", ""),
+                ),
+                datos.get("rol", "Cliente"),
             )
             for datos in usuarios_json
         ]
@@ -46,7 +44,6 @@ class RestauranteServicio:
             for datos in productos_json
         ]
 
-        # Semana 15: carga las ventas almacenadas.
         self.ventas = [
             Venta(
                 datos.get("identificador", ""),
@@ -57,8 +54,11 @@ class RestauranteServicio:
             for datos in ventas_json
         ]
 
+    # -------------------------------------------------
+    # ACCESO
+    # -------------------------------------------------
+
     def validar_acceso(self, usuario, contrasena):
-        # Verifica las credenciales con los usuarios cargados.
         for usuario_registrado in self.usuarios:
             if (
                 usuario_registrado.usuario == usuario
@@ -67,6 +67,10 @@ class RestauranteServicio:
                 return usuario_registrado
 
         return None
+
+    # -------------------------------------------------
+    # CANTIDADES
+    # -------------------------------------------------
 
     def cantidad_usuarios(self):
         return len(self.usuarios)
@@ -77,6 +81,10 @@ class RestauranteServicio:
     def cantidad_ventas(self):
         return len(self.ventas)
 
+    # -------------------------------------------------
+    # LISTADOS
+    # -------------------------------------------------
+
     def listar_usuarios(self):
         return self.usuarios
 
@@ -86,8 +94,11 @@ class RestauranteServicio:
     def listar_ventas(self):
         return self.ventas
 
+    # -------------------------------------------------
+    # PERSISTENCIA DE PRODUCTOS
+    # -------------------------------------------------
+
     def guardar_productos(self):
-        # Convierte los productos en datos y los guarda en JSON.
         datos = [
             {
                 "codigo": producto.codigo,
@@ -104,6 +115,31 @@ class RestauranteServicio:
             datos,
         )
 
+    # -------------------------------------------------
+    # PERSISTENCIA DE USUARIOS
+    # -------------------------------------------------
+
+    def guardar_usuarios(self):
+        datos = [
+            {
+                "identificador": usuario.identificador,
+                "nombre": usuario.nombre,
+                "usuario": usuario.usuario,
+                "contrasena": usuario.contrasena,
+                "rol": usuario.rol,
+            }
+            for usuario in self.usuarios
+        ]
+
+        self.archivo_servicio.escribir_json(
+            "usuarios.json",
+            datos,
+        )
+
+    # -------------------------------------------------
+    # BÚSQUEDAS
+    # -------------------------------------------------
+
     def buscar_producto_por_codigo(self, codigo):
         codigo = codigo.strip()
 
@@ -113,7 +149,10 @@ class RestauranteServicio:
 
         return None
 
-    def buscar_usuario_por_identificador(self, identificador):
+    def buscar_usuario_por_identificador(
+        self,
+        identificador,
+    ):
         identificador = identificador.strip()
 
         for usuario in self.usuarios:
@@ -122,10 +161,21 @@ class RestauranteServicio:
 
         return None
 
-    def generar_identificador_venta(self):
-        siguiente = len(self.ventas) + 1
+    def buscar_usuario_por_nombre_usuario(
+        self,
+        nombre_usuario,
+    ):
+        nombre_usuario = nombre_usuario.strip()
 
-        return f"V{siguiente:03d}"
+        for usuario in self.usuarios:
+            if usuario.usuario == nombre_usuario:
+                return usuario
+
+        return None
+
+    # -------------------------------------------------
+    # PRODUCTOS
+    # -------------------------------------------------
 
     def registrar_producto(
         self,
@@ -175,7 +225,6 @@ class RestauranteServicio:
                 "No existe un producto con ese codigo."
             )
 
-        # Se crea un producto temporal para validar los nuevos datos.
         datos_validados = Producto(
             codigo,
             nombre,
@@ -185,7 +234,9 @@ class RestauranteServicio:
         )
 
         producto_actual.nombre = datos_validados.nombre
-        producto_actual.categoria = datos_validados.categoria
+        producto_actual.categoria = (
+            datos_validados.categoria
+        )
         producto_actual.precio = datos_validados.precio
         producto_actual.stock = datos_validados.stock
 
@@ -208,12 +259,163 @@ class RestauranteServicio:
 
         return producto_actual
 
-    # ---------------------------------------------------------
-    # Ventas - Semana 15
-    # ---------------------------------------------------------
+    # -------------------------------------------------
+    # USUARIOS - SEMANA 16
+    # -------------------------------------------------
+
+    def registrar_usuario(
+        self,
+        identificador,
+        nombre,
+        usuario,
+        contrasena,
+        rol,
+    ):
+        nuevo_usuario = Usuario(
+            identificador,
+            nombre,
+            usuario,
+            contrasena,
+            rol,
+        )
+
+        if nuevo_usuario.rol == "Administrador":
+            raise ValueError(
+                "No se pueden registrar nuevos "
+                "administradores desde esta pantalla."
+            )
+
+        if (
+            self.buscar_usuario_por_identificador(
+                nuevo_usuario.identificador
+            )
+            is not None
+        ):
+            raise ValueError(
+                "Ya existe un usuario con ese identificador."
+            )
+
+        if (
+            self.buscar_usuario_por_nombre_usuario(
+                nuevo_usuario.usuario
+            )
+            is not None
+        ):
+            raise ValueError(
+                "Ya existe un usuario con ese "
+                "nombre de usuario."
+            )
+
+        self.usuarios.append(nuevo_usuario)
+        self.guardar_usuarios()
+
+        return nuevo_usuario
+
+    def actualizar_usuario(
+        self,
+        identificador,
+        nombre,
+        usuario,
+        contrasena,
+        rol,
+        identificador_usuario_actual=None,
+    ):
+        usuario_actual = (
+            self.buscar_usuario_por_identificador(
+                identificador
+            )
+        )
+
+        if usuario_actual is None:
+            raise ValueError(
+                "No existe un usuario con ese identificador."
+            )
+
+        datos_validados = Usuario(
+            identificador,
+            nombre,
+            usuario,
+            contrasena,
+            rol,
+        )
+
+        usuario_con_mismo_login = (
+            self.buscar_usuario_por_nombre_usuario(
+                datos_validados.usuario
+            )
+        )
+
+        if (
+            usuario_con_mismo_login is not None
+            and usuario_con_mismo_login.identificador
+            != usuario_actual.identificador
+        ):
+            raise ValueError(
+                "Ya existe otro usuario con ese "
+                "nombre de usuario."
+            )
+
+        if (
+            identificador_usuario_actual
+            == usuario_actual.identificador
+            and usuario_actual.rol == "Administrador"
+            and datos_validados.rol != "Administrador"
+        ):
+            raise ValueError(
+                "No puede cambiar el rol del "
+                "administrador actual."
+            )
+
+        usuario_actual.nombre = datos_validados.nombre
+        usuario_actual.usuario = datos_validados.usuario
+        usuario_actual.contrasena = (
+            datos_validados.contrasena
+        )
+        usuario_actual.rol = datos_validados.rol
+
+        self.guardar_usuarios()
+
+        return usuario_actual
+
+    def eliminar_usuario(
+        self,
+        identificador,
+        identificador_usuario_actual=None,
+    ):
+        usuario_actual = (
+            self.buscar_usuario_por_identificador(
+                identificador
+            )
+        )
+
+        if usuario_actual is None:
+            raise ValueError(
+                "No existe un usuario con ese identificador."
+            )
+
+        if (
+            usuario_actual.identificador
+            == identificador_usuario_actual
+        ):
+            raise ValueError(
+                "No puede eliminar el usuario "
+                "actualmente autenticado."
+            )
+
+        self.usuarios.remove(usuario_actual)
+        self.guardar_usuarios()
+
+        return usuario_actual
+
+    # -------------------------------------------------
+    # VENTAS
+    # -------------------------------------------------
+
+    def generar_identificador_venta(self):
+        siguiente = len(self.ventas) + 1
+        return f"V{siguiente:03d}"
 
     def guardar_ventas(self):
-        # Convierte las ventas en datos y las guarda en JSON.
         datos = [
             {
                 "identificador": venta.identificador,
